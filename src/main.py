@@ -1,6 +1,6 @@
 # main.py
 import gui # Impor modul gui yang berisi kelas AppGUI
-from signal_processing import signal_processing # Untuk SIGNAL_BUFFER_SIZE, dll. jika ada konfigurasi global.
+import signal_processing # Untuk SIGNAL_BUFFER_SIZE, dll. jika ada konfigurasi global.
                          # Namun, gui.py sudah mengimpornya.
                          # Bisa dihapus jika tidak ada setup global dari main.py.
 
