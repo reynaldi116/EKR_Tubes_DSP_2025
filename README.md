@@ -149,9 +149,9 @@ Dikembangkan oleh EKR Team sebagai Tugas Besar mata kuliah Digital Signal Proces
 | Eichal Elphindo Ginting     | 122140165 | [eichalelphindoginting](https://github.com/eichalelphindoginting)         |
 | Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
 
-## Logbook Mingguan Proyek
+## Logbook Kegiatan Proyek
 
-| Minggu Ke- | Tanggal          | Aktivitas/Progress                                                                                                                                                            |
+| No         | Tanggal          | Aktivitas/Progress                                                                                                                                                            |
 | :--------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1          | 08/05/2025     | Pembentukan anggota tim.																			|
 | 2          | 11/05/2025    | Pembuatan Repositori Github pengumpulan tugas, dan penambahan kontributor													|
