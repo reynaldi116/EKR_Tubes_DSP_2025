@@ -2,155 +2,164 @@
 import numpy as np
 from scipy.signal import butter, filtfilt
 from scipy.fft import fft
-from scipy.ndimage import uniform_filter1d # <<<--- IMPORT BARU untuk moving average
+from scipy.ndimage import uniform_filter1d  # Untuk moving average detrending yang efisien
 
-# --- Parameter Filter ---
-# rPPG (Detak Jantung: umumnya 0.75 - 4 Hz atau 45 - 240 BPM)
+# --- Parameter filter untuk detak jantung (rPPG) ---
+# Rentang frekuensi normal detak jantung ~0.75 - 4 Hz (45 - 240 BPM)
 RPPG_LOWCUT = 0.75
 RPPG_HIGHCUT = 4.0
 RPPG_FILTER_ORDER = 5
 
-# Respirasi (Pernapasan: umumnya 0.1 - 0.5 Hz atau 6 - 30 BPM)
+# --- Parameter filter untuk pernapasan (respirasi) ---
+# Rentang frekuensi pernapasan ~0.1 - 0.8 Hz (6 - 48 RPM)
 RESP_LOWCUT = 0.1
-RESP_HIGHCUT = 0.8 # Sedikit dinaikkan batas atasnya, bisa sampai 0.8Hz (48 RPM) untuk aktivitas ringan
-RESP_FILTER_ORDER = 2 # Bisa juga 5 jika sinyal sangat noisy
+RESP_HIGHCUT = 0.8  # Batas atas dinaikkan untuk aktivitas ringan
+RESP_FILTER_ORDER = 2  # Orde filter yang lebih rendah untuk noise rendah
 
-# Ukuran buffer untuk sinyal mentah sebelum filtering dan analisis FFT
-# Dinaikkan untuk stabilitas yang lebih baik (misal, untuk ~10-15 detik data pada 30 FPS)
-# Default sebelumnya 256 (~8.5s @ 30fps)
-SIGNAL_BUFFER_SIZE = 384 # Sekarang ~12.8 detik @ 30fps. Anda bisa coba 450 atau 512 juga.
+# Ukuran buffer untuk simpan data sinyal sebelum filtering dan FFT
+SIGNAL_BUFFER_SIZE = 384  # ~12.8 detik data @ 30 FPS, agar analisis stabil
 
 class SignalProcessor:
     def __init__(self, fs, buffer_size=SIGNAL_BUFFER_SIZE):
         """
         Inisialisasi pemroses sinyal.
+
         Args:
             fs (float): Frekuensi sampling (FPS kamera).
             buffer_size (int): Ukuran buffer sinyal.
         """
         if fs <= 0:
             print(f"Peringatan: Frekuensi sampling (fs) tidak valid: {fs}. Menggunakan fs=30.0 sebagai default.")
-            fs = 30.0 # Fallback jika FPS tidak valid
+            fs = 30.0  # Fallback jika FPS tidak valid
         self.fs = fs
         self.buffer_size = buffer_size
-        self.rppg_raw_signal = []
-        self.resp_raw_signal = []
+        self.rppg_raw_signal = []  # Buffer sinyal rPPG mentah (channel hijau)
+        self.resp_raw_signal = []  # Buffer sinyal pernapasan mentah (gerakan)
 
     def _butter_bandpass_filter(self, data, lowcut, highcut, order):
         """
-        Menerapkan filter bandpass Butterworth.
+        Terapkan filter bandpass Butterworth pada data sinyal.
+
         Args:
-            data (list or np.array): Sinyal input.
+            data (list/np.array): Data sinyal input.
             lowcut (float): Frekuensi cutoff bawah.
             highcut (float): Frekuensi cutoff atas.
-            order (int): Orde filter.
-        Returns:
-            np.array: Sinyal terfilter, atau array kosong jika error.
-        """
-        if len(data) < order * 3: # Data harus cukup panjang untuk filter
-            # print(f"Peringatan filter: data tidak cukup panjang ({len(data)}) untuk orde filter ({order}).")
-            return np.array([]) # Kembalikan array kosong jika data tidak cukup
+            order (int): Orde filter Butterworth.
 
-        nyq = 0.5 * self.fs
+        Returns:
+            np.array: Data sinyal terfilter, atau array kosong jika data tidak cukup.
+        """
+        if len(data) < order * 3:  # Cek data cukup panjang untuk filtering
+            return np.array([])  # Return kosong jika tidak cukup
+
+        nyq = 0.5 * self.fs  # Frekuensi Nyquist
         low = lowcut / nyq
         high = highcut / nyq
         
-        # Validasi batas frekuensi
+        # Validasi batas cutoff normalisasi
         if not (0 < low < 1 and 0 < high < 1 and low < high):
-            print(f"Peringatan filter: Batas frekuensi tidak valid setelah normalisasi (low: {low}, high: {high}).")
-            return np.array(data) # Kembalikan data asli jika batas tidak valid
+            print(f"Peringatan filter: Batas frekuensi tidak valid (low: {low}, high: {high}).")
+            return np.array(data)  # Return data asli jika cutoff tidak valid
 
         try:
             b, a = butter(order, [low, high], btype='band')
-            y = filtfilt(b, a, data) # filtfilt untuk zero-phase filtering
+            y = filtfilt(b, a, data)  # Zero-phase filtering
             return y
         except ValueError as e:
-            print(f"Error saat filtering ({lowcut}-{highcut} Hz, order {order}): {e}. Mengembalikan data asli.")
-            return np.array(data) # Kembalikan data asli jika ada error lain
+            print(f"Error saat filtering ({lowcut}-{highcut} Hz): {e}. Return data asli.")
+            return np.array(data)
 
     def _detrend_with_moving_average(self, signal_segment, window_seconds):
         """
-        Menghilangkan tren dari segmen sinyal menggunakan moving average.
+        Hapus tren lambat sinyal dengan moving average.
+
         Args:
             signal_segment (np.array): Segmen sinyal input.
             window_seconds (float): Ukuran window moving average dalam detik.
+
         Returns:
-            np.array: Sinyal yang sudah di-detrend.
+            np.array: Sinyal yang sudah dihilangkan tren lambatnya (detrended).
         """
         if len(signal_segment) == 0:
             return np.array([])
 
         window_samples = int(self.fs * window_seconds)
-        if window_samples < 3: # Window MA minimal 3 sampel
+        if window_samples < 3:  # Minimal 3 sampel window
             window_samples = 3
         
         if len(signal_segment) >= window_samples:
-            # uniform_filter1d lebih efisien dan menangani tepi dengan baik (mode 'reflect')
+            # Moving average efisien dengan uniform_filter1d dan mode refleksi tepi
             moving_avg = uniform_filter1d(signal_segment, size=window_samples, mode='reflect')
             detrended_signal = signal_segment - moving_avg
         else:
-            # Fallback ke simple mean removal jika data tidak cukup untuk window MA
+            # Jika data pendek, buang rata-rata sederhana
             detrended_signal = signal_segment - np.mean(signal_segment)
         return detrended_signal
 
     def process_rppg(self, roi_pixels_green_channel_mean):
         """
-        Memproses sinyal rPPG mentah, filter, dan estimasi BPM.
+        Proses sinyal rPPG dari channel hijau ROI:
+        simpan, detrend, filter, FFT untuk estimasi BPM.
+
+        Args:
+            roi_pixels_green_channel_mean (float): Rata-rata intensitas hijau ROI frame terbaru.
+
+        Returns:
+            tuple: (filtered_rppg (np.array), estimated_bpm (float))
         """
         self.rppg_raw_signal.append(roi_pixels_green_channel_mean)
         if len(self.rppg_raw_signal) > self.buffer_size:
             self.rppg_raw_signal.pop(0)
 
         if len(self.rppg_raw_signal) < self.buffer_size:
-            return np.array([]), 0.0 # Butuh buffer penuh untuk analisis stabil
+            return np.array([]), 0.0  # Buffer belum penuh
 
         current_rppg_segment = np.array(self.rppg_raw_signal)
 
-        # Detrending menggunakan Moving Average (window ~1.5-2 detik untuk rPPG)
-        # Ini membantu menghilangkan variasi pencahayaan lambat atau gerakan kepala kecil
+        # Detrend sinyal dengan moving average ~2 detik window
         detrended_rppg = self._detrend_with_moving_average(current_rppg_segment, window_seconds=2.0)
 
-        # Filtering
+        # Filter bandpass untuk rentang detak jantung
         filtered_rppg = self._butter_bandpass_filter(detrended_rppg, RPPG_LOWCUT, RPPG_HIGHCUT, RPPG_FILTER_ORDER)
-        if len(filtered_rppg) == 0: # Jika filtering gagal atau data tidak cukup
-            return current_rppg_segment, 0.0 # Kembalikan sinyal mentah (atau detrended) agar plot tidak kosong
+        if len(filtered_rppg) == 0:
+            return current_rppg_segment, 0.0  # Jika gagal filter, return sinyal mentah
 
-        # Estimasi BPM menggunakan FFT
+        # FFT untuk estimasi frekuensi dominan => BPM
         N = len(filtered_rppg)
-        if N < self.fs: # Butuh setidaknya 1 detik data untuk FFT yang berarti
+        if N < self.fs:  # Minimal 1 detik data untuk FFT
             return filtered_rppg, 0.0
         
         yf = fft(filtered_rppg)
-        # Frekuensi dihitung hingga Nyquist (fs/2)
-        # (1.0 / self.fs) adalah periode sampling (T)
-        # N * (1.0 / self.fs) adalah total durasi sinyal
-        # Frekuensi step = 1 / (Total Durasi Sinyal) = self.fs / N
-        xf = np.fft.fftfreq(N, 1.0/self.fs)[:N//2] # Menggunakan np.fft.fftfreq untuk kemudahan
+        xf = np.fft.fftfreq(N, 1.0/self.fs)[:N//2]  # Frekuensi positif
 
-        # Cari frekuensi dominan dalam rentang rPPG
-        # Pastikan xf positif karena fftfreq menghasilkan negatif juga
+        # Cari indeks frekuensi dalam rentang rPPG
         valid_freq_indices = np.where((xf >= RPPG_LOWCUT) & (xf <= RPPG_HIGHCUT))[0]
         
         if len(valid_freq_indices) == 0:
-            return filtered_rppg, 0.0 # Tidak ada komponen frekuensi di rentang yang diinginkan
+            return filtered_rppg, 0.0
 
-        # Ambil magnitudo spektrum
         abs_yf = np.abs(yf[valid_freq_indices])
-        if len(abs_yf) == 0: # Seharusnya tidak terjadi jika valid_freq_indices tidak kosong
+        if len(abs_yf) == 0:
             return filtered_rppg, 0.0
 
         dominant_freq_index_in_subset = np.argmax(abs_yf)
         dominant_freq = xf[valid_freq_indices[dominant_freq_index_in_subset]]
-        
-        bpm = dominant_freq * 60
-        # Pembulatan sederhana untuk BPM agar tidak terlalu fluktuatif digit desimalnya
-        bpm = round(bpm, 1) 
+
+        bpm = dominant_freq * 60  # Konversi Hz ke BPM
+        bpm = round(bpm, 1)
 
         return filtered_rppg, bpm
 
     def process_respiration(self, raw_motion_signal_value):
         """
-        Memproses sinyal respirasi mentah (dari gerakan), filter, dan estimasi RPM.
+        Proses sinyal pernapasan (gerakan):
+        simpan, detrend dengan window lebih panjang, filter, FFT untuk RPM.
+
+        Args:
+            raw_motion_signal_value (float): Sinyal mentah pernapasan frame terbaru.
+
+        Returns:
+            tuple: (filtered_resp (np.array), estimated_rpm (float))
         """
         self.resp_raw_signal.append(raw_motion_signal_value)
         if len(self.resp_raw_signal) > self.buffer_size:
@@ -161,18 +170,17 @@ class SignalProcessor:
 
         current_resp_segment = np.array(self.resp_raw_signal)
 
-        # Detrending menggunakan Moving Average (window lebih panjang, misal ~8-10 detik untuk respirasi)
-        # Ini sangat penting untuk sinyal gerakan yang bisa memiliki drift karena postur
+        # Detrend dengan moving average ~10 detik window (drift postur dihilangkan)
         detrended_resp = self._detrend_with_moving_average(current_resp_segment, window_seconds=10.0)
         
-        # Filtering
+        # Filter bandpass respirasi
         filtered_resp = self._butter_bandpass_filter(detrended_resp, RESP_LOWCUT, RESP_HIGHCUT, RESP_FILTER_ORDER)
         if len(filtered_resp) == 0:
             return current_resp_segment, 0.0
 
-        # Estimasi RPM menggunakan FFT
+        # FFT untuk frekuensi dominan respirasi (RPM)
         N = len(filtered_resp)
-        if N < self.fs * 2: # Butuh data yang cukup panjang untuk frekuensi rendah respirasi (misal 2x periode terendah)
+        if N < self.fs * 2:  # Butuh cukup panjang untuk frekuensi rendah (2 periode)
             return filtered_resp, 0.0
             
         yf = fft(filtered_resp)
@@ -190,13 +198,15 @@ class SignalProcessor:
         dominant_freq_index_in_subset = np.argmax(abs_yf)
         dominant_freq = xf[valid_freq_indices[dominant_freq_index_in_subset]]
         
-        rpm = dominant_freq * 60
+        rpm = dominant_freq * 60  # Konversi Hz ke RPM
         rpm = round(rpm, 1)
 
         return filtered_resp, rpm
 
     def get_raw_rppg_signal_for_plot(self):
+        # Return buffer sinyal rPPG mentah untuk plotting
         return np.array(self.rppg_raw_signal)
 
     def get_raw_resp_signal_for_plot(self):
+        # Return buffer sinyal respirasi mentah untuk plotting
         return np.array(self.resp_raw_signal)
