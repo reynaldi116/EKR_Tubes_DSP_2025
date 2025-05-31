@@ -1,15 +1,164 @@
-# dsp-finalproject2025
-Anggota Kelompok Projek Tubes
+# 🤖 DSP-FINAL_PROJECT_2025
+# PENGOLAHAN SINYAL DIGITAL IF3024
 
-Matakuliah Pengolahan Sinyal Data
+# EN-Version
+## 📖 Project Overview
+This project is a comprehensive application that integrates video capture, real-time audio signal processing, and interactive visualization within a graphical user interface (GUI). Developed as part of a Digital Signal Processing (DSP) coursework, it showcases practical implementation of key DSP concepts using Python.
 
-Dosen Pengampu 
+---
 
-Nama anggota
+## 🛠️ Key Components
 
-Muhammad Kaisar Tedy 122140054
+### 🔹 src/main.py
+Coordinates the overall logic and acts as the main controller connecting GUI, signal processing, and video capture.
 
-Reynaldi Cristian Simamora 122140116
+### 🔹 src/gui.py
+Contains the GUI implementation using a Python framework. Provides buttons and visual interface for interacting with the app.
 
-Eichal Elphindo Ginting 122140165
+### 🔹 src/camera/video_capture.py
+Handles video capture from the camera, allowing real-time image input for the system.
+
+### 🔹 src/signal_processing/signal_processing.py
+Performs digital signal processing tasks, especially Fast Fourier Transform (FFT) to analyze the frequency content of audio signals.
+
+### 🔹 src/utils/utils.py
+Utility functions to support other modules, such as data formatting and helper functions.
+
+### 🔹 src/visualization/visualization.py
+Responsible for plotting and visualizing signal processing results, such as waveform or frequency spectrum.
+
+---
+
+## 🖥️ How to Run
+1. Ensure Python and necessary libraries are installed (Anaconda recommended).
+2. Navigate to the project folder.
+3. Run the application:
+   ```bash
+   cd src
+   python main_app.py
+   ```
+4. The GUI will appear, allowing real-time audio processing and visualization.
+
+---
+
+# Real-Time Physiological Monitoring Application
+
+## 💡 Main Features
+
+### 🫀 Real-time Heart Rate (BPM) Estimation
+- Uses **MediaPipe Face Detection** (based on the BlazeFace model via `.tflite` file) for accurate face detection.
+- Implements the **POS (Plane-Orthogonal to Skin)** algorithm to extract rPPG signals from the average RGB color values in the facial Region of Interest (ROI).
+- Applies signal filtering (Butterworth bandpass, detrending) and FFT analysis to compute BPM.
+
+### 🌬️ Real-time Respiratory Rate (RPM) Estimation
+- Utilizes **MediaPipe Pose Landmarker** to identify shoulder landmarks.
+- Shoulder positions dynamically define the ROI in the chest/shoulder area.
+- Applies **Optical Flow (Lucas-Kanade)** to track features within the ROI and analyze the average vertical motion as the raw respiratory signal.
+- Filters the signal and uses FFT analysis to calculate RPM.
+
+### 🖥️ Graphical User Interface (GUI)
+- Built with **Tkinter** and `ttk` using custom themes and styling for a modern, responsive look.
+- Displays real-time video feed with facial ROI and respiratory ROI/feature visualizations.
+- Shows smoothed numeric values for BPM and RPM, updated periodically.
+- Real-time plots of filtered rPPG and respiratory signals using embedded **Matplotlib**.
+- Includes a status bar for operational feedback to the user.
+
+
+---
+
+## 👨‍💻 Contributors
+Developed by EKR Team as final project of Digital Signal Processing course in 2025.
+
+| Name             | ID Student       | Github Account                                                               |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------ |
+| Reynaldi Cristian Simamora  | 122140116 | [reynaldi116](https://github.com/reynaldi116)                             |
+| Eichal Elphindo Ginting     | 122140165 | [eichalelphindoginting](https://github.com/eichalelphindoginting)         |
+| Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
+
+---
+
+# Versi ID
+## 📖 Gambaran Umum Proyek
+Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan video, pemrosesan sinyal audio secara real-time, dan visualisasi interaktif dalam sebuah antarmuka grafis (GUI). Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah Digital Signal Processing (DSP) dan menunjukkan penerapan nyata dari konsep-konsep dasar DSP menggunakan bahasa pemrograman Python.
+
+---
+
+## 🛠️ Komponen Utama
+
+### 🔹 src/main.py
+Mengatur alur logika utama dan bertindak sebagai pengendali utama yang menghubungkan GUI, pemrosesan sinyal, dan pengambilan video.
+
+### 🔹 src/gui.py
+Berisi implementasi antarmuka pengguna grafis (GUI) menggunakan pustaka Python. Menyediakan tombol dan tampilan visual untuk berinteraksi dengan aplikasi.
+
+### 🔹 src/camera/video_capture.py
+Bertanggung jawab untuk menangkap video dari kamera secara real-time sebagai input visual bagi sistem.
+
+### 🔹 src/signal_processing/signal_processing.py
+Melakukan tugas-tugas pemrosesan sinyal digital, khususnya Transformasi Fourier Cepat (FFT) untuk menganalisis kandungan frekuensi dari sinyal audio.
+
+### 🔹 src/utils/utils.py
+Fungsi-fungsi utilitas pendukung modul lain, seperti pemformatan data dan fungsi bantu lainnya.
+
+### 🔹 src/visualization/visualization.py
+Bertugas menampilkan hasil pemrosesan sinyal dalam bentuk visual, seperti gelombang suara atau spektrum frekuensi.
+
+---
+
+## 🖥️ Cara Menjalankan Aplikasi
+1. Pastikan Python dan pustaka-pustaka yang dibutuhkan sudah terpasang (disarankan menggunakan Anaconda).
+2. Buka terminal dan arahkan ke folder proyek.
+3. Jalankan aplikasi dengan perintah:
+   ```bash
+   cd src
+   python main_app.py
+   ```
+4. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
+
+---
+
+# Aplikasi Pemantauan Fisiologis Real-Time
+
+## 💡 Fitur Utama
+
+### 🫀 Estimasi Denyut Jantung (BPM) Real-time
+- Menggunakan **MediaPipe Face Detection** (berdasarkan model BlazeFace melalui file `.tflite`) untuk deteksi wajah yang akurat.
+- Menerapkan algoritma **POS (Plane-Orthogonal to Skin)** untuk mengekstraksi sinyal rPPG dari nilai warna RGB rata-rata di Region of Interest (ROI) wajah.
+- Menerapkan penyaringan sinyal (Butterworth bandpass, detrending) dan analisis FFT untuk menghitung BPM.
+- 
+### 🌬️ Estimasi Laju Pernapasan (RPM) Real-time
+- Menggunakan **MediaPipe Pose Landmarker** untuk mengidentifikasi titik acuan bahu.
+- Posisi bahu secara dinamis menentukan ROI di area dada/bahu.
+- Menerapkan **Optical Flow (Lucas-Kanade)** untuk melacak fitur dalam ROI dan menganalisis gerakan vertikal rata-rata sebagai sinyal pernapasan mentah.
+- Memfilter sinyal dan menggunakan analisis FFT untuk menghitung RPM.
+  
+### 🖥️ Antarmuka Pengguna Grafis (GUI)
+- Dibuat dengan **Tkinter** dan `ttk` menggunakan tema dan gaya khusus untuk tampilan yang modern dan responsif.
+- Menampilkan umpan video waktu nyata dengan ROI wajah dan ROI pernapasan/visualisasi fitur.
+- Menampilkan nilai numerik yang dihaluskan untuk BPM dan RPM, diperbarui secara berkala.
+- Plot waktu nyata dari rPPG yang difilter dan sinyal pernapasan menggunakan **Matplotlib** yang tertanam.
+- Menyertakan bilah status untuk umpan balik operasional kepada pengguna.
+---
+
+## 👨‍💻 Kontributor
+Dikembangkan oleh EKR Team sebagai Tugas Besar mata kuliah Digital Signal Processing tahun 2025.
+
+| Nama Lengkap                | NIM       | Akun GitHub                                                               |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------ |
+| Reynaldi Cristian Simamora  | 122140116 | [reynaldi116](https://github.com/reynaldi116)                             |
+| Eichal Elphindo Ginting     | 122140165 | [eichalelphindoginting](https://github.com/eichalelphindoginting)         |
+| Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
+
+## Logbook Kegiatan Proyek
+
+| No         | Tanggal          | Aktivitas/Progress                                                                                                                                                            |
+| :--------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1          | 08/05/2025     | Pembentukan anggota tim.																			|
+| 2          | 11/05/2025    | Pembuatan Repositori Github pengumpulan tugas, dan penambahan kontributor													|
+| 3          | 25/05/2025   | Diskusi Awal Pengerjaaan																			|
+| 4          | 29/05/2025     | Pengimplementasian video real time awal, dan riset metode estimasi respirai dan detak jantung											|
+| 5          | 30/05/2025    | Pembentukan sinyal, dan pengembangan model respirasi dan rppg dengan model terkait, dan pemantapan tampilan GUI								|
+| 6          | 31/05/2025     | Pemantapan keseluruhan kode program pembuatan laporan report															|
+
+---
 
