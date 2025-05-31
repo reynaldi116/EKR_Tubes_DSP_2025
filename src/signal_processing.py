@@ -13,7 +13,7 @@ RPPG_FILTER_ORDER = 5
 # Respirasi (Pernapasan: umumnya 0.1 - 0.5 Hz atau 6 - 30 BPM)
 RESP_LOWCUT = 0.1
 RESP_HIGHCUT = 0.8 # Sedikit dinaikkan batas atasnya, bisa sampai 0.8Hz (48 RPM) untuk aktivitas ringan
-RESP_FILTER_ORDER = 5 # Bisa juga 5 jika sinyal sangat noisy
+RESP_FILTER_ORDER = 2 # Bisa juga 5 jika sinyal sangat noisy
 
 # Ukuran buffer untuk sinyal mentah sebelum filtering dan analisis FFT
 # Dinaikkan untuk stabilitas yang lebih baik (misal, untuk ~10-15 detik data pada 30 FPS)

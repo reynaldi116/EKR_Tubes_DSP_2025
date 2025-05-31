@@ -9,7 +9,7 @@ if __name__ == "__main__":
     Titik masuk utama aplikasi Pengukuran Fisiologis.
     Script ini menginisialisasi dan menjalankan antarmuka pengguna grafis (GUI)
     yang didefinisikan dalam modul 'gui'.
-    """
+    """ 
     print(f"Memulai aplikasi dari main.py...")
     print(f"Menggunakan SIGNAL_BUFFER_SIZE: {signal_processing.SIGNAL_BUFFER_SIZE}") # Contoh akses konstanta
 
