@@ -136,18 +136,3 @@ Muhammad Kaisar Teddy (122140058)
 ## 📜 Lisensi
 Proyek ini hanya ditujukan untuk keperluan edukasi dan pembelajaran.
 
-Makasih ya udah baca! Yuk terus belajar teknologi! 💻✨
-Anggota Kelompok Projek Tubes
-
-Matakuliah Pengolahan Sinyal Data
-
-Dosen Pengampu 
-
-Nama anggota
-
-
-
-Reynaldi Cristian Simamora 122140116
-
-Eichal Elphindo Ginting 122140165
-
