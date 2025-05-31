@@ -1,4 +1,5 @@
 # 🤖 DSP-FINAL_PROJECT_2025
+# PENGOLAHAN SINYAL DIGITAL IF3024
 
 # EN-Version
 ## 📖 Project Overview
@@ -7,12 +8,6 @@ This project is a comprehensive application that integrates video capture, real-
 ---
 
 ## 🛠️ Key Components
-
-### 🔹 main_app.py
-The main entry point of the application. Running this script launches the entire system.
-
-### 🔹 tubes_dsp.ipynb
-A Jupyter Notebook used for experimentation and testing of signal processing functionalities in an interactive format.
 
 ### 🔹 src/main.py
 Coordinates the overall logic and acts as the main controller connecting GUI, signal processing, and video capture.
@@ -39,6 +34,7 @@ Responsible for plotting and visualizing signal processing results, such as wave
 2. Navigate to the project folder.
 3. Run the application:
    ```bash
+   cd src
    python main_app.py
    ```
 4. The GUI will appear, allowing real-time audio processing and visualization.
@@ -46,26 +42,39 @@ Responsible for plotting and visualizing signal processing results, such as wave
 ---
 
 ## 🌟 Features
-- Real-time video and audio input
-- Signal processing using FFT
-- Clean and user-friendly GUI
-- Modular code structure for easy understanding
+# Real-Time Physiological Monitoring Application
+
+## 💡 Main Features
+
+### 🫀 Real-time Heart Rate (BPM) Estimation
+- Uses **MediaPipe Face Detection** (based on the BlazeFace model via `.tflite` file) for accurate face detection.
+- Implements the **POS (Plane-Orthogonal to Skin)** algorithm to extract rPPG signals from the average RGB color values in the facial Region of Interest (ROI).
+- Applies signal filtering (Butterworth bandpass, detrending) and FFT analysis to compute BPM.
+
+### 🌬️ Real-time Respiratory Rate (RPM) Estimation
+- Utilizes **MediaPipe Pose Landmarker** to identify shoulder landmarks.
+- Shoulder positions dynamically define the ROI in the chest/shoulder area.
+- Applies **Optical Flow (Lucas-Kanade)** to track features within the ROI and analyze the average vertical motion as the raw respiratory signal.
+- Filters the signal and uses FFT analysis to calculate RPM.
+
+### 🖥️ Graphical User Interface (GUI)
+- Built with **Tkinter** and `ttk` using custom themes and styling for a modern, responsive look.
+- Displays real-time video feed with facial ROI and respiratory ROI/feature visualizations.
+- Shows smoothed numeric values for BPM and RPM, updated periodically.
+- Real-time plots of filtered rPPG and respiratory signals using embedded **Matplotlib**.
+- Includes a status bar for operational feedback to the user.
+
 
 ---
 
 ## 👨‍💻 Contributors
 Developed by EKR Team as final project of Digital Signal Processing course in 2025.
 
-Reynaldi Cristian Simamora (122140116)
-
-Eichal Elphindo Ginting (122140165)
-
-Muhammad Kaisar Teddy (122140058)
-
----
-
-## 📜 License
-This project is for educational purposes only.
+| Name             | ID Student       | Github Account                                                               |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------ |
+| Reynaldi Cristian Simamora  | 122140116 | [reynaldi116](https://github.com/reynaldi116)                             |
+| Eichal Elphindo Ginting     | 122140165 | [eichalelphindoginting](https://github.com/eichalelphindoginting)         |
+| Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
 
 ---
 
@@ -76,12 +85,6 @@ Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan vi
 ---
 
 ## 🛠️ Komponen Utama
-
-### 🔹 main_app.py
-Merupakan titik masuk utama dari aplikasi. Menjalankan skrip ini akan memulai seluruh sistem.
-
-### 🔹 tubes_dsp.ipynb
-Notebook Jupyter yang digunakan untuk eksperimen dan pengujian fitur pemrosesan sinyal dalam format interaktif.
 
 ### 🔹 src/main.py
 Mengatur alur logika utama dan bertindak sebagai pengendali utama yang menghubungkan GUI, pemrosesan sinyal, dan pengambilan video.
@@ -108,6 +111,7 @@ Bertugas menampilkan hasil pemrosesan sinyal dalam bentuk visual, seperti gelomb
 2. Buka terminal dan arahkan ke folder proyek.
 3. Jalankan aplikasi dengan perintah:
    ```bash
+   cd src
    python main_app.py
    ```
 4. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
@@ -115,24 +119,44 @@ Bertugas menampilkan hasil pemrosesan sinyal dalam bentuk visual, seperti gelomb
 ---
 
 ## 🌟 Fitur Utama
-- Input video dan audio secara real-time
-- Pemrosesan sinyal menggunakan FFT
-- Antarmuka yang bersih dan mudah digunakan
-- Struktur kode yang modular dan mudah dipahami
+
+* **Estimasi Detak Jantung (BPM) Real-time**:
+    * Menggunakan **MediaPipe Face Detection** (berbasis model BlazeFace melalui file `.tflite`) untuk deteksi wajah yang akurat.
+    * Menerapkan algoritma **POS (Plane-Orthogonal to Skin)** untuk mengekstrak sinyal rPPG dari data rata-rata warna RGB pada Region of Interest (ROI) wajah.
+    * Pemfilteran sinyal (Butterworth bandpass, detrending) dan analisis FFT untuk menghitung BPM.
+* **Estimasi Laju Pernapasan (RPM) Real-time**:
+    * Menggunakan **MediaPipe Pose Landmarker** untuk mengidentifikasi landmark bahu.
+    * Posisi bahu digunakan untuk menentukan ROI secara dinamis pada area dada/bahu.
+    * **Optical Flow (Lucas-Kanade)** digunakan untuk melacak fitur di dalam ROI tersebut dan menganalisis gerakan vertikal rata-rata sebagai sinyal pernapasan mentah.
+    * Pemfilteran sinyal dan analisis FFT untuk menghitung RPM.
+* **Antarmuka Pengguna Grafis (GUI)**:
+    * Dibangun menggunakan Tkinter dan `ttk` dengan tema dan styling kustom untuk tampilan yang modern dan responsif.
+    * Menampilkan feed video real-time dengan visualisasi ROI wajah dan fitur/ROI pernapasan.
+    * Menampilkan nilai BPM dan RPM numerik yang diperbarui secara berkala (dengan penghalusan).
+    * Menampilkan plot sinyal rPPG dan respirasi yang telah difilter secara real-time menggunakan Matplotlib yang di-embed.
+    * Menyediakan status bar untuk umpan balik operasional kepada pengguna.
 
 ---
 
 ## 👨‍💻 Kontributor
 Dikembangkan oleh EKR Team sebagai Tugas Besar mata kuliah Digital Signal Processing tahun 2025.
 
-Reynaldi Cristian Simamora (122140116)
+| Nama Lengkap                | NIM       | Akun GitHub                                                               |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------ |
+| Reynaldi Cristian Simamora  | 122140116 | [reynaldi116](https://github.com/reynaldi116)                             |
+| Eichal Elphindo Ginting     | 122140165 | [eichalelphindoginting](https://github.com/eichalelphindoginting)         |
+| Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
 
-Eichal Elphindo Ginting (122140165)
+## Logbook Mingguan Proyek
 
-Muhammad Kaisar Teddy (122140058)
+| Minggu Ke- | Tanggal          | Aktivitas/Progress                                                                                                                                                            |
+| :--------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1          | 08/05/2025     | Pembentukan anggota tim.																			|
+| 2          | 11/05/2025    | Pembuatan Repositori Github pengumpulan tugas, dan penambahan kontributor													|
+| 3          | 25/05/2025   | Diskusi Awal Pengerjaaan																			|
+| 4          | 29/05/2025     | Pengimplementasian video real time awal, dan riset metode estimasi respirai dan detak jantung											|
+| 5          | 30/05/2025    | Pembentukan sinyal, dan pengembangan model respirasi dan rppg dengan model terkait, dan pemantapan tampilan GUI								|
+| 6          | 31/05/2025     | Pemantapan keseluruhan kode program pembuatan laporan report															|
 
 ---
-
-## 📜 Lisensi
-Proyek ini hanya ditujukan untuk keperluan edukasi dan pembelajaran.
 
