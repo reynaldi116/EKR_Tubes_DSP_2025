@@ -1,8 +1,10 @@
 # 🤖 DSP-FINAL_PROJECT_2025
-# Digital Signal Processing IF3024
-# Course instructor = Martin Clinton Tosima Manullang, S.T., M.T.
-# EN-Version
-## 📖 Project OverviewThis project is an application that integrates video capture, real-time audio signal processing, and interactive visualization within a graphical user interface (GUI). Developed as part of the Digital Signal Processing (DSP) course assignment, it demonstrates practical implementation of fundamental DSP concepts using the Python programming language. The main process involves capturing respiratory signals.
+## Digital Signal Processing IF3024
+## Course instructor = Martin Clinton Tosima Manullang, S.T., M.T.
+## EN-Version
+## Project Overview
+This project is an application that integrates video capture, real-time audio signal processing, and interactive visualization within a graphical user interface (GUI). Developed as part of the Digital Signal Processing (DSP) course assignment, it demonstrates practical implementation of fundamental DSP concepts using the Python programming language. The main process involves capturing respiratory signals.
+
 ---
 
 ## 🛠️ Key Components
@@ -30,6 +32,7 @@ Uses MediaPipe’s pose landmarks for left and right shoulders to calculate aver
 
 ### 🔹 src/motion_tracker.py
 Monitors movement of feature points within a specified region of interest (ROI) in the video to estimate respiratory signals based on vertical displacement of body motion. If feature points are insufficient or lost, re-detection ensures signal stability. Optical flow techniques detect subtle frame-to-frame movements for non-invasive respiratory pattern monitoring
+
 ---
 
 ## 🖥️ How to Run
@@ -52,7 +55,7 @@ Monitors movement of feature points within a specified region of interest (ROI) 
 ```
 5. The user interface will launch, allowing you to start real-time audio signal processing immediately.
 
-# Real-Time Physiological Monitoring Application
+## Real-Time Physiological Monitoring Application
 
 ## 💡 Main Features
 
@@ -87,10 +90,10 @@ Developed by EKR Team as final project of Digital Signal Processing course in 20
 | Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
 
 ---
-# Matakuliah Pengolahan Sinyal Digital IF3024
-# Dosen Pengampu : Martin Clinton Tosima Manullang, S.T., M.T.
-# 
-# Versi ID
+## Versi ID
+## Matakuliah Pengolahan Sinyal Digital IF3024
+## Dosen Pengampu : Martin Clinton Tosima Manullang, S.T., M.T. 
+
 ## 📖 Gambaran Umum Proyek
 Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan video, pemrosesan sinyal audio secara real-time, dan visualisasi interaktif dalam sebuah antarmuka grafis (GUI). Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah Digital Signal Processing (DSP) dan menunjukkan penerapan nyata dari konsep-konsep dasar DSP menggunakan bahasa pemrograman Python. Untuk proses yang dilakukan adalah pengambilan sinyal respirasi, 
 
@@ -121,6 +124,7 @@ Memantau perpindahan titik-titik fitur pada area tertentu (ROI) di video untuk m
 
 ### 🔹 src/pose_respiration_tracker.py
 Penerapan mediapipe untuk landmark_pose bahu kiri dan kanan, melakukan perhitungan perubahan vertikal rata-rata bahu, dan mengaplikasikan serta menghasilkan sinyal pernapasan dalam bentuk landmark tervisualisasi
+
 ---
 
 ##  Cara Menjalankan Aplikasi
@@ -137,15 +141,15 @@ Penerapan mediapipe untuk landmark_pose bahu kiri dan kanan, melakukan perhitung
    conda activate myenv
    pip install -r requirements.txt
    ```
-6. Jalankan aplikasi dengan perintah:
+4. Jalankan aplikasi dengan perintah:
    ```bash
    cd src
    python main_app.py
    ```
-7. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
+5. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
 ---
 
-# Aplikasi Pemantauan Fisiologis Real-Time
+## Aplikasi Pemantauan Fisiologis Real-Time
 
 ##  Fitur Utama
 
