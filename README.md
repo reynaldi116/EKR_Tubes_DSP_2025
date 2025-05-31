@@ -41,7 +41,6 @@ Responsible for plotting and visualizing signal processing results, such as wave
 
 ---
 
-## 🌟 Features
 # Real-Time Physiological Monitoring Application
 
 ## 💡 Main Features
@@ -118,24 +117,27 @@ Bertugas menampilkan hasil pemrosesan sinyal dalam bentuk visual, seperti gelomb
 
 ---
 
-## 🌟 Fitur Utama
+# Aplikasi Pemantauan Fisiologis Real-Time
 
-* **Estimasi Detak Jantung (BPM) Real-time**:
-    * Menggunakan **MediaPipe Face Detection** (berbasis model BlazeFace melalui file `.tflite`) untuk deteksi wajah yang akurat.
-    * Menerapkan algoritma **POS (Plane-Orthogonal to Skin)** untuk mengekstrak sinyal rPPG dari data rata-rata warna RGB pada Region of Interest (ROI) wajah.
-    * Pemfilteran sinyal (Butterworth bandpass, detrending) dan analisis FFT untuk menghitung BPM.
-* **Estimasi Laju Pernapasan (RPM) Real-time**:
-    * Menggunakan **MediaPipe Pose Landmarker** untuk mengidentifikasi landmark bahu.
-    * Posisi bahu digunakan untuk menentukan ROI secara dinamis pada area dada/bahu.
-    * **Optical Flow (Lucas-Kanade)** digunakan untuk melacak fitur di dalam ROI tersebut dan menganalisis gerakan vertikal rata-rata sebagai sinyal pernapasan mentah.
-    * Pemfilteran sinyal dan analisis FFT untuk menghitung RPM.
-* **Antarmuka Pengguna Grafis (GUI)**:
-    * Dibangun menggunakan Tkinter dan `ttk` dengan tema dan styling kustom untuk tampilan yang modern dan responsif.
-    * Menampilkan feed video real-time dengan visualisasi ROI wajah dan fitur/ROI pernapasan.
-    * Menampilkan nilai BPM dan RPM numerik yang diperbarui secara berkala (dengan penghalusan).
-    * Menampilkan plot sinyal rPPG dan respirasi yang telah difilter secara real-time menggunakan Matplotlib yang di-embed.
-    * Menyediakan status bar untuk umpan balik operasional kepada pengguna.
+## 💡 Fitur Utama
 
+### 🫀 Estimasi Denyut Jantung (BPM) Real-time
+- Menggunakan **MediaPipe Face Detection** (berdasarkan model BlazeFace melalui file `.tflite`) untuk deteksi wajah yang akurat.
+- Menerapkan algoritma **POS (Plane-Orthogonal to Skin)** untuk mengekstraksi sinyal rPPG dari nilai warna RGB rata-rata di Region of Interest (ROI) wajah.
+- Menerapkan penyaringan sinyal (Butterworth bandpass, detrending) dan analisis FFT untuk menghitung BPM.
+- 
+### 🌬️ Estimasi Laju Pernapasan (RPM) Real-time
+- Menggunakan **MediaPipe Pose Landmarker** untuk mengidentifikasi titik acuan bahu.
+- Posisi bahu secara dinamis menentukan ROI di area dada/bahu.
+- Menerapkan **Optical Flow (Lucas-Kanade)** untuk melacak fitur dalam ROI dan menganalisis gerakan vertikal rata-rata sebagai sinyal pernapasan mentah.
+- Memfilter sinyal dan menggunakan analisis FFT untuk menghitung RPM.
+  
+### 🖥️ Antarmuka Pengguna Grafis (GUI)
+- Dibuat dengan **Tkinter** dan `ttk` menggunakan tema dan gaya khusus untuk tampilan yang modern dan responsif.
+- Menampilkan umpan video waktu nyata dengan ROI wajah dan ROI pernapasan/visualisasi fitur.
+- Menampilkan nilai numerik yang dihaluskan untuk BPM dan RPM, diperbarui secara berkala.
+- Plot waktu nyata dari rPPG yang difilter dan sinyal pernapasan menggunakan **Matplotlib** yang tertanam.
+- Menyertakan bilah status untuk umpan balik operasional kepada pengguna.
 ---
 
 ## 👨‍💻 Kontributor
