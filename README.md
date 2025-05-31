@@ -1,49 +1,56 @@
 # 🤖 DSP-FINAL_PROJECT_2025
-# PENGOLAHAN SINYAL DIGITAL IF3024
-
+# Digital Signal Processing IF3024
+# Course instructor = Martin Clinton Tosima Manullang, S.T., M.T.
 # EN-Version
-## 📖 Project Overview
-This project is a comprehensive application that integrates video capture, real-time audio signal processing, and interactive visualization within a graphical user interface (GUI). Developed as part of a Digital Signal Processing (DSP) coursework, it showcases practical implementation of key DSP concepts using Python.
-
+## 📖 Project OverviewThis project is an application that integrates video capture, real-time audio signal processing, and interactive visualization within a graphical user interface (GUI). Developed as part of the Digital Signal Processing (DSP) course assignment, it demonstrates practical implementation of fundamental DSP concepts using the Python programming language. The main process involves capturing respiratory signals.
 ---
 
 ## 🛠️ Key Components
 
 ### 🔹 src/main.py
-Coordinates the overall logic and acts as the main controller connecting GUI, signal processing, and video capture.
+Manages the primary application logic and acts as the main controller connecting the GUI components.
 
 ### 🔹 src/gui.py
-Contains the GUI implementation using a Python framework. Provides buttons and visual interface for interacting with the app.
+Contains the graphical user interface implementation using Python libraries, providing buttons and visual elements for user interaction.
 
 ### 🔹 src/video_capture.py
-Handles video capture from the camera, allowing real-time image input for the system.
+Responsible for capturing real-time video input from the camera to serve as the system’s visual input.
 
 ### 🔹 src/signal_processing.py
-Performs digital signal processing tasks, especially Fast Fourier Transform (FFT) to analyze the frequency content of audio signals.
+Implements a Butterworth bandpass filter to isolate relevant frequencies (heart rate ~0.75–4 Hz, respiration ~0.1–0.8 Hz), detrends signals via moving average to stabilize and remove drift, and computes frequency spectrum using FFT to identify dominant frequencies converted to BPM (heart rate) or RPM (respiration). It also buffers raw signals for continuous analysis.
 
 ### 🔹 src/utils.py
-Utility functions to support other modules, such as data formatting and helper functions.
+Utility functions supporting other modules, such as data formatting and helper routines
 
 ### 🔹 src/visualization.py
-Responsible for plotting and visualizing signal processing results, such as waveform or frequency spectrum.
+Handles the visualization of processed signals, displaying waveforms or frequency spectra
 
 ### 🔹 src/pose_respiration_tracker.py
+Uses MediaPipe’s pose landmarks for left and right shoulders to calculate average vertical displacement, producing and visualizing respiratory signals based on landmark movement.
 
 ### 🔹 src/motion_tracker.py
-
+Monitors movement of feature points within a specified region of interest (ROI) in the video to estimate respiratory signals based on vertical displacement of body motion. If feature points are insufficient or lost, re-detection ensures signal stability. Optical flow techniques detect subtle frame-to-frame movements for non-invasive respiratory pattern monitoring
 ---
 
 ## 🖥️ How to Run
-1. Ensure Python and necessary libraries are installed (Anaconda recommended).
-2. Navigate to the project folder.
-3. Run the application:
+1. Open a terminal and navigate to the project folder.
+2. Clone this repository using the command:
    ```bash
-   cd src
-   python main_app.py
+   git clone http https://github.com/reynaldi116/EKR_Tubes_DSP_2025.git
    ```
-4. The GUI will appear, allowing real-time audio processing and visualization.
-
----
+3. Use Python version 3.12 or above. If unavailable, create and activate  a Conda environment:
+   ```bash
+   # To create a Conda environment:  
+   conda create -n myenv python=3.10.6  
+   conda activate myenv  
+   pip install -r requirements.txt  
+   ```
+4. Run the application :
+```bash
+   cd src  
+   python main_app.py  
+```
+5. The user interface will launch, allowing you to start real-time audio signal processing immediately.
 
 # Real-Time Physiological Monitoring Application
 
@@ -80,7 +87,9 @@ Developed by EKR Team as final project of Digital Signal Processing course in 20
 | Muhammad Kaisar Teddy       | 122140058 | [Muhammad-Kaisar-Teddy](https://github.com/Muhammad-Kaisar-Teddy)         |
 
 ---
-
+# Matakuliah Pengolahan Sinyal Digital IF3024
+# Dosen Pengampu : Martin Clinton Tosima Manullang, S.T., M.T.
+# 
 # Versi ID
 ## 📖 Gambaran Umum Proyek
 Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan video, pemrosesan sinyal audio secara real-time, dan visualisasi interaktif dalam sebuah antarmuka grafis (GUI). Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah Digital Signal Processing (DSP) dan menunjukkan penerapan nyata dari konsep-konsep dasar DSP menggunakan bahasa pemrograman Python. Untuk proses yang dilakukan adalah pengambilan sinyal respirasi, 
