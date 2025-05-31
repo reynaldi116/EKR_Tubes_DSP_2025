@@ -137,12 +137,12 @@ Penerapan mediapipe untuk landmark_pose bahu kiri dan kanan, melakukan perhitung
    conda activate myenv
    pip install -r requirements.txt
    ```
-6. Jalankan aplikasi dengan perintah:
+4. Jalankan aplikasi dengan perintah:
    ```bash
    cd src
    python main_app.py
    ```
-7. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
+5. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
 ---
 
 # Aplikasi Pemantauan Fisiologis Real-Time
