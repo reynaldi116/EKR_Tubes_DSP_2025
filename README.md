@@ -15,17 +15,21 @@ Coordinates the overall logic and acts as the main controller connecting GUI, si
 ### 🔹 src/gui.py
 Contains the GUI implementation using a Python framework. Provides buttons and visual interface for interacting with the app.
 
-### 🔹 src/camera/video_capture.py
+### 🔹 src/video_capture.py
 Handles video capture from the camera, allowing real-time image input for the system.
 
-### 🔹 src/signal_processing/signal_processing.py
+### 🔹 src/signal_processing.py
 Performs digital signal processing tasks, especially Fast Fourier Transform (FFT) to analyze the frequency content of audio signals.
 
-### 🔹 src/utils/utils.py
+### 🔹 src/utils.py
 Utility functions to support other modules, such as data formatting and helper functions.
 
-### 🔹 src/visualization/visualization.py
+### 🔹 src/visualization.py
 Responsible for plotting and visualizing signal processing results, such as waveform or frequency spectrum.
+
+### 🔹 src/pose_respiration_tracker.py
+
+### 🔹 src/motion_tracker.py
 
 ---
 
@@ -79,14 +83,14 @@ Developed by EKR Team as final project of Digital Signal Processing course in 20
 
 # Versi ID
 ## 📖 Gambaran Umum Proyek
-Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan video, pemrosesan sinyal audio secara real-time, dan visualisasi interaktif dalam sebuah antarmuka grafis (GUI). Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah Digital Signal Processing (DSP) dan menunjukkan penerapan nyata dari konsep-konsep dasar DSP menggunakan bahasa pemrograman Python.
+Proyek ini merupakan sebuah aplikasi yang mengintegrasikan proses pengambilan video, pemrosesan sinyal audio secara real-time, dan visualisasi interaktif dalam sebuah antarmuka grafis (GUI). Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah Digital Signal Processing (DSP) dan menunjukkan penerapan nyata dari konsep-konsep dasar DSP menggunakan bahasa pemrograman Python. Untuk proses yang dilakukan adalah pengambilan sinyal respirasi, 
 
 ---
 
 ## 🛠️ Komponen Utama
 
 ### 🔹 src/main.py
-Mengatur alur logika utama dan bertindak sebagai pengendali utama yang menghubungkan GUI, pemrosesan sinyal, dan pengambilan video.
+Mengatur alur logika utama dan bertindak sebagai pengendali utama yang menghubungkan GUI.
 
 ### 🔹 src/gui.py
 Berisi implementasi antarmuka pengguna grafis (GUI) menggunakan pustaka Python. Menyediakan tombol dan tampilan visual untuk berinteraksi dengan aplikasi.
@@ -95,44 +99,59 @@ Berisi implementasi antarmuka pengguna grafis (GUI) menggunakan pustaka Python. 
 Bertanggung jawab untuk menangkap video dari kamera secara real-time sebagai input visual bagi sistem.
 
 ### 🔹 src/signal_processing/signal_processing.py
-Melakukan tugas-tugas pemrosesan sinyal digital, khususnya Transformasi Fourier Cepat (FFT) untuk menganalisis kandungan frekuensi dari sinyal audio.
+Penerapan filter bandpass Butterworth untuk memisahkan frekuensi relevan (detak jantung ~0.75–4 Hz, respirasi ~0.1–0.8 Hz), menghilangkan tren (detrending) menggunakan moving average agar sinyal lebih stabil dan bebas drift, dan perhitungan spektrum frekuensi dengan FFT untuk menemukan frekuensi dominan yang kemudian dikonversi ke BPM (detak jantung) atau RPM (pernapasan), menyimpan buffer sinyal mentah untuk analisis berkelanjutan.
 
 ### 🔹 src/utils/utils.py
 Fungsi-fungsi utilitas pendukung modul lain, seperti pemformatan data dan fungsi bantu lainnya.
 
-### 🔹 src/visualization/visualization.py
+### 🔹 src/visualization.py
 Bertugas menampilkan hasil pemrosesan sinyal dalam bentuk visual, seperti gelombang suara atau spektrum frekuensi.
 
+### 🔹 src/motion_tracker.py
+Memantau perpindahan titik-titik fitur pada area tertentu (ROI) di video untuk mengestimasi sinyal pernapasan berdasarkan perubahan posisi vertikal gerakan tubuh. Bila titik fitur terlalu sedikit atau tidak dapat terlacak dengan baik, fitur akan dideteksi ulang untuk menjaga kestabilan sinyal. Teknik optical flow membantu mendeteksi pergerakan halus dari frame ke frame, sehingga bisa digunakan untuk memantau pola gerakan pernapasan secara non-invasif.
+
+### 🔹 src/pose_respiration_tracker.py
+Penerapan mediapipe untuk landmark_pose bahu kiri dan kanan, melakukan perhitungan perubahan vertikal rata-rata bahu, dan mengaplikasikan serta menghasilkan sinyal pernapasan dalam bentuk landmark tervisualisasi
 ---
 
-## 🖥️ Cara Menjalankan Aplikasi
-1. Pastikan Python dan pustaka-pustaka yang dibutuhkan sudah terpasang (disarankan menggunakan Anaconda).
-2. Buka terminal dan arahkan ke folder proyek.
-3. Jalankan aplikasi dengan perintah:
+##  Cara Menjalankan Aplikasi
+
+1. Buka terminal dan arahkan ke folder proyek.
+2. Memanggil atau menduplikat repositori ini dengan memanggil command
+   ```bash
+   git clone http https://github.com/reynaldi116/EKR_Tubes_DSP_2025.git
+   ```
+3. Menggunakan python versi 3.12 atau ke atas. Jika tidak gunakan environment conda
+   ```bash
+   "Untuk membuat Environment di conda menggunakan command berikut : "
+   conda create -n myenv python=3.10.6
+   conda activate myenv
+   pip install -r requirements.txt
+   ```
+6. Jalankan aplikasi dengan perintah:
    ```bash
    cd src
    python main_app.py
    ```
-4. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
-
+7. Antarmuka pengguna akan muncul dan Anda dapat langsung memulai pemrosesan sinyal audio secara real-time.
 ---
 
 # Aplikasi Pemantauan Fisiologis Real-Time
 
-## 💡 Fitur Utama
+##  Fitur Utama
 
-### 🫀 Estimasi Denyut Jantung (BPM) Real-time
+###  Estimasi Denyut Jantung (BPM) Real-time
 - Menggunakan **MediaPipe Face Detection** (berdasarkan model BlazeFace melalui file `.tflite`) untuk deteksi wajah yang akurat.
 - Menerapkan algoritma **POS (Plane-Orthogonal to Skin)** untuk mengekstraksi sinyal rPPG dari nilai warna RGB rata-rata di Region of Interest (ROI) wajah.
 - Menerapkan penyaringan sinyal (Butterworth bandpass, detrending) dan analisis FFT untuk menghitung BPM.
 - 
-### 🌬️ Estimasi Laju Pernapasan (RPM) Real-time
+###  Estimasi Laju Pernapasan (RPM) Real-time
 - Menggunakan **MediaPipe Pose Landmarker** untuk mengidentifikasi titik acuan bahu.
 - Posisi bahu secara dinamis menentukan ROI di area dada/bahu.
 - Menerapkan **Optical Flow (Lucas-Kanade)** untuk melacak fitur dalam ROI dan menganalisis gerakan vertikal rata-rata sebagai sinyal pernapasan mentah.
 - Memfilter sinyal dan menggunakan analisis FFT untuk menghitung RPM.
   
-### 🖥️ Antarmuka Pengguna Grafis (GUI)
+###  Antarmuka Pengguna Grafis (GUI)
 - Dibuat dengan **Tkinter** dan `ttk` menggunakan tema dan gaya khusus untuk tampilan yang modern dan responsif.
 - Menampilkan umpan video waktu nyata dengan ROI wajah dan ROI pernapasan/visualisasi fitur.
 - Menampilkan nilai numerik yang dihaluskan untuk BPM dan RPM, diperbarui secara berkala.
